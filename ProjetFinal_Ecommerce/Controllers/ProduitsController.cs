@@ -25,6 +25,58 @@ namespace ProjetFinal_Ecommerce.Controllers
             return View(await _context.DbSet_Produits.ToListAsync());
         }
 
+        public async Task<IActionResult> SearchNom(string rechercheNom)
+        {
+            IQueryable<Produit> requete = from produit in _context.DbSet_Produits
+                                       where produit.Nom.Contains(rechercheNom)
+                                       select produit;
+
+            IEnumerable<Produit> result = await requete.ToListAsync();
+            return View("Index", result);
+        }
+        // Filtre par catégorie
+        public async Task<IActionResult> FiltreCategorie(string rechercheCategorie)
+        {
+
+            IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Categorie == rechercheCategorie);
+
+            IEnumerable<Produit> result = await requete.ToListAsync();
+            return View("Index", result);
+        }
+
+        // Filtre par marque
+        public async Task<IActionResult> FiltreMarque(string rechercheMarque)
+        {
+
+            IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Marque == rechercheMarque);
+
+            IEnumerable<Produit> result = await requete.ToListAsync();
+            return View("Index", result);
+        }
+
+        // Filtre par prix
+        public async Task<IActionResult> FiltrePrix(string id)
+        {
+            IQueryable<Produit> requete;
+            if (id == "Élevé")
+            {
+                requete = _context.DbSet_Produits.Where(p => p.Prix >= 500);
+            }
+            else if (id == "Moyen")
+            {
+                requete = _context.DbSet_Produits.Where(p => p.Prix < 500 && p.Prix >= 100);
+            }
+            else if (id == "Bas")
+            {
+                requete = _context.DbSet_Produits.Where(p => p.Prix < 100);
+            }
+            else return NotFound();
+
+
+
+            IEnumerable<Produit> result = await requete.OrderBy(prod => prod.Prix).ToListAsync();
+            return View("Index", result);
+        }
         // GET: Produits/Details/5
         public async Task<IActionResult> Details(int? id)
         {

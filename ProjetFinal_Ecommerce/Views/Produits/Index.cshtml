@@ -4,11 +4,60 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Index, liste des produits</h1>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<h2>Recherche par nom:</h2>
+
+<form asp-controller="Produits" asp-action="SearchNom" method="get">
+    <input type="text" name="rechercheNom" value="" />
+    <button class="btn btn-primary" type="submit">Soumettre</button>
+</form>
+
+<h2>Recherche par:</h2>
+<div class="row justify-content-end">
+    <div class="col-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Nos marques
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Nintendo">Nintendo</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Nike">Nike</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Adidas">Adidas</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Samsung">Samsung</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Nos catégories
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Jeux Vidéo">Jeux vidéo</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Cuisine">Cuisine</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Électronique">Électronique</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Informatique">Informatique</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Nos Prix
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-id="Élevé">Élevé</a></li>
+                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-id="Moyen">Moyen</a></li>
+                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-id="Bas">Bas</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
