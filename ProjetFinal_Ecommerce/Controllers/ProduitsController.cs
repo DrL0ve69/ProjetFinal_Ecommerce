@@ -20,53 +20,72 @@ namespace ProjetFinal_Ecommerce.Controllers
         }
 
         // GET: Produits
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            return View(await _context.DbSet_Produits.ToListAsync());
+            int pageSize = 10;
+
+            return View(await PaginatedList<Produit>.CreateAsync(_context.DbSet_Produits.AsNoTracking(),
+                        pageNumber ?? 1, pageSize)); // Créer une page avec une liste paginée
+
+            //return View(await _context.DbSet_Produits.ToListAsync());
         }
 
-        public async Task<IActionResult> SearchNom(string rechercheNom)
+        public async Task<IActionResult> SearchNom(string rechercheNom, int? pageNumber)
         {
+            ViewBag.Search = rechercheNom;
+
+            // Préparer la requête LINQ
             IQueryable<Produit> requete = from produit in _context.DbSet_Produits
                                        where produit.Nom.Contains(rechercheNom)
                                        select produit;
 
-            IEnumerable<Produit> result = await requete.ToListAsync();
-            return View("Index", result);
+            int pageSize = 5; // Nombre d'objets par page
+
+
+
+            return View("Index", await PaginatedList<Produit>.CreateAsync(requete.AsNoTracking(),
+                            pageNumber ?? 1, pageSize)); // Créer une page avec les résultats
+            //IEnumerable<Produit> result = await requete.ToListAsync();
+            //return View("Index", result);
         }
         // Filtre par catégorie
-        public async Task<IActionResult> FiltreCategorie(string rechercheCategorie)
+        public async Task<IActionResult> FiltreCategorie(string rechercheId, int? pageNumber)
         {
+            ViewBag.FiltreCategorie = rechercheId;
 
-            IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Categorie == rechercheCategorie);
+            IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Categorie == rechercheId);
+            int pageSize = 3; // Nombre d'objets par page
 
-            IEnumerable<Produit> result = await requete.ToListAsync();
-            return View("Index", result);
+
+            return View("Index", await PaginatedList<Produit>.CreateAsync(requete.AsNoTracking(),
+                pageNumber ?? 1, pageSize)); // Créer une page avec les résultats
+            //IEnumerable<Produit> result = await requete.ToListAsync();
+            //return View("Index", result);
         }
 
         // Filtre par marque
-        public async Task<IActionResult> FiltreMarque(string rechercheMarque)
+        public async Task<IActionResult> FiltreMarque(string rechercheId)
         {
 
-            IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Marque == rechercheMarque);
+            IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Marque == rechercheId);
 
             IEnumerable<Produit> result = await requete.ToListAsync();
             return View("Index", result);
         }
 
         // Filtre par prix
-        public async Task<IActionResult> FiltrePrix(string id)
+        public async Task<IActionResult> FiltrePrix(string rechercheId)
         {
             IQueryable<Produit> requete;
-            if (id == "Élevé")
+            if (rechercheId == "Élevé")
             {
                 requete = _context.DbSet_Produits.Where(p => p.Prix >= 500);
             }
-            else if (id == "Moyen")
+            else if (rechercheId == "Moyen")
             {
                 requete = _context.DbSet_Produits.Where(p => p.Prix < 500 && p.Prix >= 100);
             }
-            else if (id == "Bas")
+            else if (rechercheId == "Bas")
             {
                 requete = _context.DbSet_Produits.Where(p => p.Prix < 100);
             }

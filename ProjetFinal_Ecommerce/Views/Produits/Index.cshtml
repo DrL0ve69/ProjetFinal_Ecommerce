@@ -1,7 +1,24 @@
-﻿@model IEnumerable<ProjetFinal_Ecommerce.Models.Produit>
+﻿@model PaginatedList<ProjetFinal_Ecommerce.Models.Produit>
 
 @{
     ViewData["Title"] = "Index";
+
+    // Conserver les paramètres de filtres ou de recherche
+    var filtrePrix = ViewBag.FiltrePrix ?? "";
+    var filtreMarque = ViewBag.FiltreMarque ?? "";
+    var filtreCategorie = ViewBag.FiltreCategorie ?? "";
+    var search = ViewBag.Search ?? "";
+
+    var id = ViewBag.FiltrePrix ?? ViewBag.FiltreMarque ?? ViewBag.FiltreCategorie ?? "";
+    // Conserver l'action
+    var action = "Index";
+
+    if (filtrePrix != "") action = "FiltrePrix";
+    else if (filtreMarque != "") action = "FiltreMarque";
+    else if (filtreCategorie != "") action = "FiltreCategorie";
+    else if (search != "") action = "SearchNom";
+
+    var p = new Produit();
 }
 
 <h1>Index, liste des produits</h1>
@@ -24,10 +41,10 @@
                 Nos marques
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Nintendo">Nintendo</a></li>
-                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Nike">Nike</a></li>
-                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Adidas">Adidas</a></li>
-                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheMarque="Samsung">Samsung</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheId="Nintendo">Nintendo</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheId="Nike">Nike</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheId="Adidas">Adidas</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreMarque" asp-route-rechercheId="Samsung">Samsung</a></li>
             </ul>
         </div>
     </div>
@@ -37,10 +54,10 @@
                 Nos catégories
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Jeux Vidéo">Jeux vidéo</a></li>
-                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Cuisine">Cuisine</a></li>
-                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Électronique">Électronique</a></li>
-                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheCategorie="Informatique">Informatique</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheId="Jeux Vidéo">Jeux vidéo</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheId="Cuisine">Cuisine</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheId="Électronique">Électronique</a></li>
+                <li><a class="dropdown-item" asp-action="FiltreCategorie" asp-route-rechercheId="Informatique">Informatique</a></li>
             </ul>
         </div>
     </div>
@@ -50,9 +67,9 @@
                 Nos Prix
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-id="Élevé">Élevé</a></li>
-                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-id="Moyen">Moyen</a></li>
-                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-id="Bas">Bas</a></li>
+                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-rechercheId="Élevé">Élevé</a></li>
+                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-rechercheId="Moyen">Moyen</a></li>
+                <li><a class="dropdown-item" asp-action="FiltrePrix" asp-route-rechercheId="Bas">Bas</a></li>
             </ul>
         </div>
     </div>
@@ -62,16 +79,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nom)
+                @Html.DisplayNameFor(_ => p.Nom)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Marque)
+                @Html.DisplayNameFor(_ => p.Marque)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categorie)
+                @Html.DisplayNameFor(_ => p.Categorie)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prix)
+                @Html.DisplayNameFor(_ => p.Prix)
             </th>
             <th></th>
         </tr>
@@ -100,3 +117,37 @@
 }
     </tbody>
 </table>
+
+@{
+    // Gérer la pagination, avec des boutons << < > >>
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(1)"
+   class="btn btn-secondary @prevDisabled">
+    &lt;&lt;
+</a> |
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-secondary @prevDisabled">
+    &lt;
+</a> |
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-secondary @nextDisabled">
+    &gt;
+</a> |
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(Model.TotalPages)"
+   class="btn btn-secondary @nextDisabled">
+    &gt;&gt;
+</a>
