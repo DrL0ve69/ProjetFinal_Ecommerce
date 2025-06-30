@@ -64,18 +64,23 @@ namespace ProjetFinal_Ecommerce.Controllers
         }
 
         // Filtre par marque
-        public async Task<IActionResult> FiltreMarque(string rechercheId)
+        public async Task<IActionResult> FiltreMarque(string rechercheId, int? pageNumber)
         {
+            ViewBag.FiltreMarque = rechercheId;
+            int pageSize = 3; // Nombre d'objets par page
 
             IQueryable<Produit> requete = _context.DbSet_Produits.Where(p => p.Marque == rechercheId);
 
             IEnumerable<Produit> result = await requete.ToListAsync();
-            return View("Index", result);
+            return View("Index", await PaginatedList<Produit>.CreateAsync(requete.AsNoTracking(),
+                pageNumber ?? 1, pageSize));
         }
 
         // Filtre par prix
-        public async Task<IActionResult> FiltrePrix(string rechercheId)
+        public async Task<IActionResult> FiltrePrix(string rechercheId, int? pageNumber)
         {
+            ViewBag.FiltrePrix = rechercheId;
+            int pageSize = 5;
             IQueryable<Produit> requete;
             if (rechercheId == "Élevé")
             {
@@ -94,7 +99,9 @@ namespace ProjetFinal_Ecommerce.Controllers
 
 
             IEnumerable<Produit> result = await requete.OrderBy(prod => prod.Prix).ToListAsync();
-            return View("Index", result);
+
+            return View("Index", await PaginatedList<Produit>.CreateAsync(requete.AsNoTracking(),
+                pageNumber ?? 1, pageSize));
         }
         // GET: Produits/Details/5
         public async Task<IActionResult> Details(int? id)
