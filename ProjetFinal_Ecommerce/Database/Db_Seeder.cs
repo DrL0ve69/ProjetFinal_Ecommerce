@@ -1,4 +1,6 @@
-﻿using ProjetFinal_Ecommerce.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using ProjetFinal_Ecommerce.Models;
+using System.Threading.Tasks;
 
 namespace ProjetFinal_Ecommerce.Database;
 
@@ -65,7 +67,7 @@ public static class Db_Seeder
         new Produit { Nom = "Jeu Zelda: Ocarina of Time", Marque = "Nintendo", Categorie = "Jeux Vidéo", Prix = 59.99m },
         new Produit { Nom = "Jeu Zelda: Majora's Mask", Marque = "Nintendo", Categorie = "Jeux Vidéo", Prix = 59.99m },
     };
-    public static void Seed(IApplicationBuilder appBuilder)
+    public static async Task Seed(IApplicationBuilder appBuilder)
     {
         Db_CommerceContext context = appBuilder.ApplicationServices.CreateScope()
             .ServiceProvider.GetRequiredService<Db_CommerceContext>();
@@ -73,8 +75,50 @@ public static class Db_Seeder
         if (!context.DbSet_Produits.Any())
         {
             context.DbSet_Produits.AddRange(_seedProduits);
+            context.SaveChanges();
 
         }
+
+        RoleManager<IdentityRole> roleManager = appBuilder.ApplicationServices.CreateScope()
+            .ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+        UserManager<IdentityUser> userManager = appBuilder.ApplicationServices.CreateScope()
+            .ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+        // Trouver le rôle Admin sinon crée le
+        IdentityRole role = await roleManager.FindByNameAsync("Admin");
+        if (role == null) 
+        {
+            IdentityResult result = await roleManager.CreateAsync(new IdentityRole("Admin"));
+            
+        }
+
+        // Trouver le rôle User sinon crée le
+        IdentityRole roleUser = await roleManager.FindByNameAsync("User");
+        if (roleUser == null)
+        {
+            IdentityResult result = await roleManager.CreateAsync(new IdentityRole("User"));
+
+        }
+        foreach (IdentityUser user in userManager.Users) 
+        {
+            IdentityResult resultatUser = await userManager.AddToRoleAsync(user, "User");
+        }
+
+        IdentityUser userAdmin = await userManager.FindByNameAsync("blabla123@email.com");
+        if (userAdmin == null) 
+        {
+            IdentityResult result = await userManager.CreateAsync(new IdentityUser ("blabla123@email.com"));
+        }
+
+        // Récupère de la base de données
+        IdentityUser admin = await userManager.FindByNameAsync("blabla123@email.com");
+        IdentityRole roleAdmin = await roleManager.FindByNameAsync("Admin");
+
+        // Ajout des propriétés, pourrait être fait à même l'objet
+        admin.EmailConfirmed = true;
+
+        IdentityResult resultatTest = await userManager.AddToRoleAsync(admin, roleAdmin.Name);
         context.SaveChanges();
     }
 }

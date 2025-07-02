@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ProjetFinal_Ecommerce.Models;
 
 namespace ProjetFinal_Ecommerce.Controllers
 {
+    
     public class ProduitsController : Controller
     {
         private readonly Db_CommerceContext _context;
@@ -144,6 +146,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         }
 
         // GET: Produits/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -164,6 +167,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Marque,Categorie,Prix")] Produit produit)
         {
             if (id != produit.Id)
@@ -195,6 +199,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         }
 
         // GET: Produits/Delete/5
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -215,6 +220,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         // POST: Produits/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var produit = await _context.DbSet_Produits.FindAsync(id);

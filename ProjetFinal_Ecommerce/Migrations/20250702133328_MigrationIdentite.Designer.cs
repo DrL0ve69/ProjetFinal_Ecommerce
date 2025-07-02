@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetFinal_Ecommerce.Database;
 
@@ -11,9 +12,11 @@ using ProjetFinal_Ecommerce.Database;
 namespace ProjetFinal_Ecommerce.Migrations
 {
     [DbContext(typeof(Db_CommerceContext))]
-    partial class Db_CommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20250702133328_MigrationIdentite")]
+    partial class MigrationIdentite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

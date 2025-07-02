@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProjetFinal_Ecommerce.Models;
 
 namespace ProjetFinal_Ecommerce.Database;
 
-public class Db_CommerceContext : DbContext
+public class Db_CommerceContext : IdentityDbContext
 {
     public Db_CommerceContext(DbContextOptions options) : base(options)
     {
