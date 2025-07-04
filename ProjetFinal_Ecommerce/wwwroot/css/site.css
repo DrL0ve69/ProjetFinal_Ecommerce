@@ -29,3 +29,52 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/*
+     Le panier offCavenas, modifier le innerHtml pour utiliser les row-col de bootstrap
+    Les classes cartItemQuantity, cartItemPrixTotal, cartItemNom, cartImage, itemCart
+*/
+.offcanvas-body .itemCart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.offcanvas-body .itemCart:nth-child(even) {
+    background-color: #eda27a;
+}
+
+.offcanvas-body .itemCart .cartItemQuantity {
+    display: flex;
+}
+
+.offcanvas-body .itemCart .cartItemQuantity span 
+{
+
+    width: 30px;
+    height: 30px;
+    background-color: floralwhite;
+    color: greenyellow;
+    border-radius: 50%;
+    padding-bottom: 40px;
+    cursor: pointer;
+}
+
+.offcanvas-body .itemCart .cartItemQuantity span:nth-child(2) 
+{
+    background-color: transparent;
+    color: darkorange;
+    cursor: text;
+}
+
+.offcanvas-body .itemCart img 
+{
+    width: 100%;
+}
+
+
+.btn-close {
+    background-color: red;
+}

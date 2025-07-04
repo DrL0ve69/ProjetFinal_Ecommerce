@@ -24,6 +24,22 @@ namespace ProjetFinal_Ecommerce.Controllers
         // GET: Produits
         public async Task<IActionResult> Index(int? pageNumber)
         {
+            int compteur = 0;
+
+            
+            if (HttpContext.Session.Keys.Contains("compteur"))
+            {
+                compteur = (int)HttpContext.Session.GetInt32("compteur");
+                
+            }
+            compteur++;
+            HttpContext.Session.SetInt32("compteur", compteur);
+
+
+
+            ViewBag.Compteur = compteur;
+            
+
             int pageSize = 10;
 
             return View(await PaginatedList<Produit>.CreateAsync(_context.DbSet_Produits.AsNoTracking(),
@@ -86,21 +102,21 @@ namespace ProjetFinal_Ecommerce.Controllers
             IQueryable<Produit> requete;
             if (rechercheId == "Élevé")
             {
-                requete = _context.DbSet_Produits.Where(p => p.Prix >= 500);
+                requete = _context.DbSet_Produits.Where(p => p.PrixUnitaire >= 500);
             }
             else if (rechercheId == "Moyen")
             {
-                requete = _context.DbSet_Produits.Where(p => p.Prix < 500 && p.Prix >= 100);
+                requete = _context.DbSet_Produits.Where(p => p.PrixUnitaire < 500 && p.PrixUnitaire >= 100);
             }
             else if (rechercheId == "Bas")
             {
-                requete = _context.DbSet_Produits.Where(p => p.Prix < 100);
+                requete = _context.DbSet_Produits.Where(p => p.PrixUnitaire < 100);
             }
             else return NotFound();
 
 
 
-            IEnumerable<Produit> result = await requete.OrderBy(prod => prod.Prix).ToListAsync();
+            IEnumerable<Produit> result = await requete.OrderBy(prod => prod.PrixUnitaire).ToListAsync();
 
             return View("Index", await PaginatedList<Produit>.CreateAsync(requete.AsNoTracking(),
                 pageNumber ?? 1, pageSize));

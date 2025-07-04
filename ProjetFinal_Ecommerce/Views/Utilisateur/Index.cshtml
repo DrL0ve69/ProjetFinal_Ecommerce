@@ -1,0 +1,105 @@
+﻿
+@*
+    Vue pour les utilisateurs & page d'accueil du site
+*@
+@model PaginatedList<Produit>
+@{
+    ViewBag.Title = "Accueil ECommerce";
+
+    // Conserver les paramètres de filtres ou de recherche
+    var filtrePrix = ViewBag.FiltrePrix ?? "";
+    var filtreMarque = ViewBag.FiltreMarque ?? "";
+    var filtreCategorie = ViewBag.FiltreCategorie ?? "";
+    var search = ViewBag.Search ?? "";
+
+    var id = ViewBag.FiltrePrix ?? ViewBag.FiltreMarque ?? ViewBag.FiltreCategorie ?? "";
+    // Conserver l'action
+    var action = "Index";
+
+    if (filtrePrix != "") action = "FiltrePrix";
+    else if (filtreMarque != "") action = "FiltreMarque";
+    else if (filtreCategorie != "") action = "FiltreCategorie";
+    else if (search != "") action = "SearchNom";
+
+    var p = new Produit();
+}
+
+
+<section> <!-- Début section produits -->
+    <div class="container-fluid">
+        <h2 class="px-5">Nos produits</h2>
+        <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                Panier <i id="icon-cart" class="fa-solid fa-cart-shopping"><span>@ViewBag.CompteurPanier</span></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            @foreach (var produit in Model)
+            {
+                <div class="col col-md-6 col-lg-4 col-xxl-3">
+                    <div class="card">
+                        <img data-id="@produit.Id"
+                             data-prix="@produit.PrixUnitaire"
+                             src="@produit.UrlImage" alt="@produit.Nom" style="aspect-ratio: 1;">
+                        <div class="card-body">
+                            <a asp-controller="Produits" asp-action="Details" asp-route-id="@produit.Id"><h5 class="card-title">@produit.Nom</h5></a> <!-- Remplacer par une action dans la balise a -->
+                            <p class="card-text text-center">@produit.PrixUnitaire $</p>
+                            <div class="container-fluid d-flex justify-content-center">
+                                <div class="container-sm d-flex align-items-center justify-content-center">
+                                    <a data-id="@produit.Id"
+                                            data-prix="@produit.PrixUnitaire"
+                                            data-nom="@produit.Nom"
+                                            class="btn btn-primary btn-card addCart text-center"
+                                            asp-action="AjoutPanier" asp-route-produitId="@produit.Id">
+
+                                            Ajouter au panier
+
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            }
+        </div>
+    </div>
+</section><!-- Fin section produits -->
+
+
+@{
+    // Gérer la pagination, avec des boutons << < > >>
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(1)"
+   class="btn btn-secondary @prevDisabled">
+    &lt;&lt;
+</a> |
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-secondary @prevDisabled">
+    &lt;
+</a> |
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-secondary @nextDisabled">
+    &gt;
+</a> |
+<a asp-action=@action
+   asp-route-rechercheId=@id
+   asp-route-rechercheNom=@ViewBag.Search
+   asp-route-pageNumber="@(Model.TotalPages)"
+   class="btn btn-secondary @nextDisabled">
+    &gt;&gt;
+</a>

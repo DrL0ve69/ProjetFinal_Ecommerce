@@ -14,6 +14,9 @@ namespace ProjetFinal_Ecommerce.Models
 
         [Required]
         [DataType(DataType.Currency)]
-        public decimal? Prix { get; set; }
+        [Display(Name ="Prix unitaire")]
+        public decimal? PrixUnitaire { get; set; }
+
+        public string UrlImage { get; set; } = "https://dummyimage.com/300x300/000/fff.jpg";
     }
 }

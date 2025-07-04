@@ -88,7 +88,7 @@
                 @Html.DisplayNameFor(_ => p.Categorie)
             </th>
             <th>
-                @Html.DisplayNameFor(_ => p.Prix)
+                @Html.DisplayNameFor(_ => p.PrixUnitaire)
             </th>
             <th></th>
         </tr>
@@ -106,7 +106,7 @@
                 @Html.DisplayFor(modelItem => item.Categorie)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Prix)
+                    @Html.DisplayFor(modelItem => item.PrixUnitaire)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -151,3 +151,9 @@
    class="btn btn-secondary @nextDisabled">
     &gt;&gt;
 </a>
+
+<div>
+    <p>
+        @ViewBag.Compteur
+    </p>
+</div>

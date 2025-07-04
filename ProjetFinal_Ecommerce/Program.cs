@@ -20,6 +20,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
+builder.Services.AddSession();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +38,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Utilisation de la session
+
+app.UseSession();
+
+
 // Les pages pour les users
 app.MapRazorPages();
 
@@ -44,7 +50,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Produits}/{action=Index}/{id?}")
+    pattern: "{controller=Utilisateur}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 // Seeder pour les tables de l'application

@@ -5,6 +5,7 @@ namespace ProjetFinal_Ecommerce.Database
     public class Db_ProduitRepository : IProduitRepository
     {
         private readonly Db_CommerceContext _context;
+
         public Db_ProduitRepository(Db_CommerceContext context)
         {
             _context = context;

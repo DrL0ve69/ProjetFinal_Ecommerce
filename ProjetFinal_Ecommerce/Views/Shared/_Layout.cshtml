@@ -6,10 +6,37 @@
     <title>@ViewData["Title"] - ProjetFinal_Ecommerce</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Lien Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProjetFinal_Ecommerce.styles.css" asp-append-version="true" />
 </head>
 <body>
+
+    <!-- Le panier offcavenas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <!-- data-bs-scroll="true" pour pouvoir scroll -->
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Vôtre panier:</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Le body du panier qui est offcavenas -->
+            <div class="container-fluid">
+                Les produits achetés ici
+            </div>
+        </div>
+        <div class="container-sm">
+            <h3 id="totalPanier">Total: <span></span>$</h3>
+        </div>
+        <!-- Bouton pour supprimer l'inventaire complet (reset le panier) -->
+        <div class="container-sm d-flex align-items-center justify-content-between">
+            <button id="btnCheckOut" class="btn btn-primary">Check Out</button>
+            <button id="btnTrashAll" class="btn btn-primary">
+                Reset le panier <span><i class="fa-solid fa-trash-arrow-up"></i></span>
+            </button>
+        </div>
+    </div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -30,6 +57,11 @@
                 </div>
                 <div>
                     @await Html.PartialAsync("_LoginPartial.cshtml")
+                </div>
+                <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        Panier <i id="icon-cart" class="fa-solid fa-cart-shopping"><span>0</span></i>
+                    </button>
                 </div>
             </div>
         </nav>
