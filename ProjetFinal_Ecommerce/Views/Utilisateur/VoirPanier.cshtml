@@ -25,7 +25,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.PrixUnitaire)
             </th>
-            <th>
+            <th class="text-center">
                 Nombre d'unité(s)
             </th>
             <th></th>
@@ -49,12 +49,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.PrixUnitaire)
                     </td>
-                    <td>
-                        @Model.Count(p => p.Id == item.Id) <!-- Ajouter les boutons pour augmenter&diminuer -->
+                    <td class="text-center">
+                        <a asp-action="DiminuerItemPanier" asp-route-produitId="@item.Id" class="btn btn-secondary">↓</a>
+                        @Model.Count(p => p.Id == item.Id)
+                        <a asp-action="AjoutPanier" asp-route-produitId="@item.Id" class="btn btn-secondary">↑</a>
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="SupprimerItemPanier" asp-route-produitId="@item.Id">Delete</a>
                     </td>
                 </tr>
     }

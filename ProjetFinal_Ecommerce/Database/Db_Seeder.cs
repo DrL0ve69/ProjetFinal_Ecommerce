@@ -102,7 +102,8 @@ public static class Db_Seeder
         }
         foreach (IdentityUser user in userManager.Users) 
         {
-            IdentityResult resultatUser = await userManager.AddToRoleAsync(user, "User");
+            IdentityUser username = await userManager.FindByNameAsync(user.UserName);
+            IdentityResult resultatUser = await userManager.AddToRoleAsync(username, "User");
         }
 
         IdentityUser userAdmin = await userManager.FindByNameAsync("blabla123@email.com");
