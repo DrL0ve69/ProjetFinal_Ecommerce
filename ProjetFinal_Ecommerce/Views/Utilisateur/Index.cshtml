@@ -29,9 +29,12 @@
     <div class="container-fluid">
         <h2 class="px-5">Nos produits</h2>
         <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+            <!--
             <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                Panier <i id="icon-cart" class="fa-solid fa-cart-shopping"><span>@ViewBag.CompteurPanier</span></i>
+                Panier <i id="icon-cart" class="fa-solid fa-cart-shopping"><span>ViewBag.CompteurPanier</span></i>
             </button>
+            -->
+            <a asp-action="VoirPanier">Voir Panier</a>
         </div>
     </div>
 

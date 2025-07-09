@@ -139,7 +139,20 @@ namespace ProjetFinal_Ecommerce.Controllers
         public IActionResult VoirPanier() 
         {
             string panier = HttpContext.Session.GetString("Panier");
-            List<Produit> listePanier = JsonSerializer.Deserialize<List<Produit>>(panier);
+            List<Produit> listePanier = new List<Produit>();
+            if (string.IsNullOrEmpty(panier))
+            {
+
+
+                string jsonNewPanier = JsonSerializer.Serialize(listePanier);
+
+                HttpContext.Session.SetString("Panier", jsonNewPanier);
+            }
+            else 
+            {
+                listePanier = JsonSerializer.Deserialize<List<Produit>>(panier);
+            }
+                
             ViewData["Panier"] = listePanier;
             return View(listePanier);
         }

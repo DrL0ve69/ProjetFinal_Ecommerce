@@ -1,4 +1,6 @@
-﻿@model List<Produit>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @{
     List<Produit> panier = ViewData["Panier"] as List<Produit> ?? new List<Produit>();
     List<Produit> panierVerification = new List<Produit>();
@@ -61,7 +63,16 @@
         </div>
         <!-- Bouton pour supprimer l'inventaire complet (reset le panier) -->
         <div class="container-sm d-flex align-items-center justify-content-between">
-            <button id="btnCheckOut" class="btn btn-primary">Check Out</button>
+
+            @if (SignInManager.IsSignedIn(User) && panier.Count !=0)
+            {
+                <button id="btnCheckOut" class="btn btn-primary">Check Out</button>
+            }
+            else
+            {
+                <button id="btnCheckOut" class="btn btn-primary" disabled>Check Out</button>
+            }
+
             <button id="btnTrashAll" class="btn btn-primary">
                 Reset le panier <span><i class="fa-solid fa-trash-arrow-up"></i></span>
             </button>

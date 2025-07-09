@@ -100,26 +100,43 @@ public static class Db_Seeder
             IdentityResult result = await roleManager.CreateAsync(new IdentityRole("User"));
 
         }
+
+        /*
         foreach (IdentityUser user in userManager.Users) 
         {
-            IdentityUser username = await userManager.FindByNameAsync(user.UserName);
-            IdentityResult resultatUser = await userManager.AddToRoleAsync(username, "User");
+            IdentityResult resultatUser = await userManager.AddToRoleAsync(user, "User");
         }
+        */
+        
 
         IdentityUser userAdmin = await userManager.FindByNameAsync("blabla123@email.com");
         if (userAdmin == null) 
         {
             IdentityResult result = await userManager.CreateAsync(new IdentityUser ("blabla123@email.com"));
         }
+        // Admin2
+        IdentityUser userAdmin2 = await userManager.FindByNameAsync("Admin2@email.com");
+        if (userAdmin2 == null)
+        {
+            IdentityResult result = await userManager.CreateAsync(new IdentityUser("Admin2@email.com"));
+        }
 
         // Récupère de la base de données
         IdentityUser admin = await userManager.FindByNameAsync("blabla123@email.com");
+        IdentityUser admin2 = await userManager.FindByNameAsync("Admin2@email.com");
+
         IdentityRole roleAdmin = await roleManager.FindByNameAsync("Admin");
 
         // Ajout des propriétés, pourrait être fait à même l'objet
         admin.EmailConfirmed = true;
+        admin2.EmailConfirmed = true;
+
+        // Modification du password
+        
 
         IdentityResult resultatTest = await userManager.AddToRoleAsync(admin, roleAdmin.Name);
+        IdentityResult resultatTest2 = await userManager.AddToRoleAsync(admin2, roleAdmin.Name);
+        IdentityResult resultatTest3 = await userManager.AddPasswordAsync(admin2, "Admin2!");
         context.SaveChanges();
     }
 }

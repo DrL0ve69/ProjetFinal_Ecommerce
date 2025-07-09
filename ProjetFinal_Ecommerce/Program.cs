@@ -54,5 +54,5 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 // Seeder pour les tables de l'application
-Db_Seeder.Seed(app);
+await Db_Seeder.Seed(app);
 app.Run();
