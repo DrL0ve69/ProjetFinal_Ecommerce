@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "VoirPanier";
+    List<Produit> panierVerification = new List<Produit>();
 }
 
 <h1>VoirPanier</h1>
@@ -25,35 +26,45 @@
                 @Html.DisplayNameFor(model => model.PrixUnitaire)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UrlImage)
+                Nombre d'unité(s)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Marque)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categorie)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrixUnitaire)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UrlImage)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@foreach (var item in Model) 
+{
+    if (!panierVerification.Any(p => p.Id == item.Id))
+    {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Marque)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Categorie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrixUnitaire)
+                    </td>
+                    <td>
+                        @Model.Count(p => p.Id == item.Id) <!-- Ajouter les boutons pour augmenter&diminuer -->
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+    }
+        <!-- Ajouter l'item au panier de vérification -->
+        panierVerification.Add(item);
 }
     </tbody>
 </table>
+<div class="container">
+    <h3>
+        Total facture: @Model.Sum(p => p.PrixUnitaire) $
+    </h3>
+</div>
