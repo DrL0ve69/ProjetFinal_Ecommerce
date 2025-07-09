@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@model List<Produit>
+@{
+    List<Produit> panier = ViewData["Panier"] as List<Produit> ?? new List<Produit>();
+    List<Produit> panierVerification = new List<Produit>();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,9 +30,34 @@
             <div class="container-fluid">
                 Les produits achetés ici
             </div>
+            <div class="container-fluid">
+                <ul>
+                    @foreach (var item in panier)
+                    {
+                        // Vérification pour éviter les doublons dans l'affichage du panier
+                        if (!panierVerification.Any(p => p.Id == item.Id))
+                        {
+                            // Ajouter l'item au panier de vérification pour éviter les doublons
+                            panierVerification.Add(item);
+
+                            <li class="d-flex justify-content-between align-items-center">
+                                <span>@item.Nom</span>
+                                <span>@item.PrixUnitaire $</span>
+                                <span class="d-flex align-items-center">
+                                    <a asp-action="DiminuerItemPanier" asp-route-produitId="@item.Id" class="btn btn-secondary">↓</a>
+                                    @panier.Count(p => p.Id == item.Id)
+                                    <a asp-action="AjoutPanier" asp-route-produitId="@item.Id" class="btn btn-secondary">↑</a>
+                                    <a asp-action="SupprimerItemPanier" asp-route-produitId="@item.Id" class="btn btn-danger">Supprimer</a>
+                                </span>
+                            </li>
+                        }
+
+                    }
+                </ul>
+            </div>
         </div>
         <div class="container-sm">
-            <h3 id="totalPanier">Total: <span></span>$</h3>
+            <h3 id="totalPanier">Total: <span>@panier.Sum(p => p.PrixUnitaire)</span>$</h3>
         </div>
         <!-- Bouton pour supprimer l'inventaire complet (reset le panier) -->
         <div class="container-sm d-flex align-items-center justify-content-between">
@@ -60,7 +90,7 @@
                 </div>
                 <div class="d-lg-flex col-lg-3 justify-content-lg-end">
                     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        Panier <i id="icon-cart" class="fa-solid fa-cart-shopping"><span>0</span></i>
+                        Panier <i id="icon-cart" class="fa-solid fa-cart-shopping"><span>@panier.Count</span></i>
                     </button>
                 </div>
             </div>

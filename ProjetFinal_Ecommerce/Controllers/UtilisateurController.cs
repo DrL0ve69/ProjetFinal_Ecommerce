@@ -20,6 +20,18 @@ namespace ProjetFinal_Ecommerce.Controllers
         {
             // Gestion du panier
             int compteurPanier = 0;
+            string panier = HttpContext.Session.GetString("Panier");
+            List<Produit> listePanier = new List<Produit>();
+
+            if (!string.IsNullOrEmpty(panier))
+            {
+                listePanier = JsonSerializer.Deserialize<List<Produit>>(panier);
+                ViewData["Panier"] = listePanier;
+            }
+            else
+            {
+                ViewData["Panier"] = listePanier;
+            }
             // 1. Vérifier s'il existe
 
             if (HttpContext.Session.Keys.Contains("compteurPanier"))
@@ -63,7 +75,8 @@ namespace ProjetFinal_Ecommerce.Controllers
             }
             
             compteurPanier = listePanier.Count();
-            
+            ViewData["Panier"] = listePanier;
+
 
             string jsonPanier = JsonSerializer.Serialize(listePanier);
             HttpContext.Session.SetString("Panier", jsonPanier);
@@ -95,6 +108,7 @@ namespace ProjetFinal_Ecommerce.Controllers
             HttpContext.Session.SetString("Panier", jsonPanier);
             // 4. Mettre à jour le compteur de produits dans le panier
             compteurPanier = listePanier.Count();
+            ViewData["Panier"] = listePanier;
             HttpContext.Session.SetInt32("compteurPanier", compteurPanier);
             return RedirectToAction("VoirPanier"); // Rediriger vers la vue du panier
         }
@@ -117,6 +131,7 @@ namespace ProjetFinal_Ecommerce.Controllers
                 HttpContext.Session.SetString("Panier", jsonPanier);
                 // 5. Mettre à jour le compteur de produits dans le panier
                 compteurPanier = listePanier.Count();
+                ViewData["Panier"] = listePanier;
                 HttpContext.Session.SetInt32("compteurPanier", compteurPanier);
             }
             return RedirectToAction("VoirPanier"); // Rediriger vers la vue du panier
@@ -125,6 +140,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         {
             string panier = HttpContext.Session.GetString("Panier");
             List<Produit> listePanier = JsonSerializer.Deserialize<List<Produit>>(panier);
+            ViewData["Panier"] = listePanier;
             return View(listePanier);
         }
 
