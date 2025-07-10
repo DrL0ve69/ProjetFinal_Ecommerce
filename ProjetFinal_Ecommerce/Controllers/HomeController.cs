@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProjetFinal_Ecommerce.Models;
+using ProjetFinal_Ecommerce.ViewModels;
 
 namespace ProjetFinal_Ecommerce.Controllers
 {
@@ -26,7 +27,13 @@ namespace ProjetFinal_Ecommerce.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ViewModels.ErrorViewModel 
+            {
+                Titre = "Erreur",
+                Message = "Une erreur s'est produite.",
+                Trace = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                Action = $"{ControllerContext.ActionDescriptor.ControllerName}/{ControllerContext.ActionDescriptor.ActionName}"
+            });
         }
     }
 }
