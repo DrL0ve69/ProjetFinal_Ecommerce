@@ -101,12 +101,12 @@ public static class Db_Seeder
 
         }
 
-        /*
-        foreach (IdentityUser user in userManager.Users) 
+        // Ajouter .ToList() pour utiliser foreach en async avec un IQueryable.
+        foreach (IdentityUser user in userManager.Users.ToList()) 
         {
             IdentityResult resultatUser = await userManager.AddToRoleAsync(user, "User");
         }
-        */
+        
         
 
         IdentityUser userAdmin = await userManager.FindByNameAsync("blabla123@email.com");
@@ -114,6 +114,8 @@ public static class Db_Seeder
         {
             IdentityResult result = await userManager.CreateAsync(new IdentityUser ("blabla123@email.com"));
         }
+
+        // Admin 2 est créé sans problème pour moi peu importe si blabla123 était déjà existant ou pas.
         // Admin2
         IdentityUser userAdmin2 = await userManager.FindByNameAsync("Admin2@email.com");
         if (userAdmin2 == null)
