@@ -184,7 +184,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Marque,Categorie,Prix")] Produit produit)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Marque,Categorie,PrixUnitaire,UrlImage")] Produit produit)
         {
             if (id != produit.Id)
             {

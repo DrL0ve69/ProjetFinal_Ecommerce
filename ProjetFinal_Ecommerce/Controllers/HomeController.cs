@@ -32,7 +32,8 @@ namespace ProjetFinal_Ecommerce.Controllers
                 Titre = "Erreur",
                 Message = "Une erreur s'est produite.",
                 Trace = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                Action = $"{ControllerContext.ActionDescriptor.ControllerName}/{ControllerContext.ActionDescriptor.ActionName}"
+                Action = $"{ControllerContext.ActionDescriptor.ControllerName}/{ControllerContext.ActionDescriptor.ActionName}",
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
             });
         }
     }

@@ -7,5 +7,8 @@ public class ErrorViewModel
     public string? Trace { get; set; } = null;
     public string? Action { get; set; } = null;
 
+    public string? RequestId { get; set; }
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
 
 }
