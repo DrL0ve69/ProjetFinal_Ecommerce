@@ -1,0 +1,69 @@
+﻿@*
+    Facture du client, ne doit être accessible que si celui-ci est connecté !!!
+*@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    List<Produit> panierVerification = new List<Produit>();
+}
+@model FactureCommande
+
+<h1>Vôtre facture : <strong>@Model.NomUtilisateur</strong></h1>
+
+<h2>Détails:</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Mockproduit.Nom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mockproduit.Marque)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mockproduit.Categorie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mockproduit.PrixUnitaire)
+            </th>
+            <th class="text-center">
+                Nombre d'unité(s)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProduitsPanier)
+        {
+            if (!panierVerification.Any(p => p.Id == item.Id))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Marque)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Categorie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrixUnitaire)
+                    </td>
+                    <td>
+                        @Model.ProduitsPanier.Count(p => p.Id == item.Id)
+                    </td>
+
+                </tr>
+            }
+            <!-- Ajouter l'item au panier de vérification -->
+            panierVerification.Add(item);
+        }
+    </tbody>
+</table>
+
+<div class="container">
+    <h3>
+        Total facture: @Model.ProduitsPanier.Sum(p => p.PrixUnitaire) $
+    </h3>
+</div>

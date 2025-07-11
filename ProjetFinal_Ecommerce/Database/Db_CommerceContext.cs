@@ -10,4 +10,5 @@ public class Db_CommerceContext : IdentityDbContext
     {
     }
     public DbSet<Produit> DbSet_Produits { get; set; }
+    public DbSet<FactureCommande> DbSet_Factures { get; set; }
 }

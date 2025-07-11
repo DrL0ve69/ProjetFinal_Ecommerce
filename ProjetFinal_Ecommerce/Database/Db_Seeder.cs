@@ -79,6 +79,12 @@ public static class Db_Seeder
 
         }
 
+        if (!context.DbSet_Factures.Any()) 
+        {
+            context.DbSet_Produits.AddRange(_seedProduits);
+            context.SaveChanges();
+        }
+
         RoleManager<IdentityRole> roleManager = appBuilder.ApplicationServices.CreateScope()
             .ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 

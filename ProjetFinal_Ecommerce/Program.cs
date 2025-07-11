@@ -13,6 +13,7 @@ builder.Services.AddDbContext<Db_CommerceContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:Db_CommerceContext_Connection"]);
 });
 builder.Services.AddScoped<IProduitRepository, Db_ProduitRepository>();
+builder.Services.AddScoped<IFactureRepository, Db_FactureRepository>();
 
 // Services utilisateurs & rôles
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)

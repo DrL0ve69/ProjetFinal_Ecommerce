@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,9 +39,27 @@ namespace ProjetFinal_Ecommerce.Controllers
 
 
             ViewBag.Compteur = compteur;
-            
-
             int pageSize = 10;
+
+            /*
+            PaginatedList<Produit> infoPagination = await PaginatedList<Produit>.CreateAsync(_context.DbSet_Produits.AsNoTracking(),
+            pageNumber ?? 1, pageSize);
+
+            string jsonDeserialPage = HttpContext.Session.GetString("infoPage");
+            if (string.IsNullOrEmpty(jsonDeserialPage))
+            {
+                return View(await PaginatedList<Produit>.CreateAsync(_context.DbSet_Produits.AsNoTracking(),
+                        pageNumber ?? 1, pageSize)); // Créer une page avec une liste paginée
+
+            }
+            else 
+            {
+                string jsonPageInfo = JsonSerializer.Serialize(infoPagination);
+                HttpContext.Session.SetString("infoPage", jsonPageInfo);
+            }
+
+            string jsonInfoPageExistant = HttpContext.Session.GetString("infoPage");
+            */
 
             return View(await PaginatedList<Produit>.CreateAsync(_context.DbSet_Produits.AsNoTracking(),
                         pageNumber ?? 1, pageSize)); // Créer une page avec une liste paginée

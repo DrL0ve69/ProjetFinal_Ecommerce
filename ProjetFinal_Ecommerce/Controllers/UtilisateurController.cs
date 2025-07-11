@@ -1,19 +1,24 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjetFinal_Ecommerce.Database;
 using ProjetFinal_Ecommerce.Models;
+using System.Security.Claims;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ProjetFinal_Ecommerce.Controllers
 {
     public class UtilisateurController : Controller
     {
         private readonly Db_CommerceContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UtilisateurController(Db_CommerceContext context)
+        public UtilisateurController(Db_CommerceContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int? pageNumber)
@@ -155,6 +160,39 @@ namespace ProjetFinal_Ecommerce.Controllers
                 
             ViewData["Panier"] = listePanier;
             return View(listePanier);
+        }
+
+        public IActionResult Commander() 
+        {
+            return View("VoirFacture");
+        }
+        public async Task<IActionResult> VoirFacture() 
+        {
+            string panier = HttpContext.Session.GetString("Panier");
+            
+            /*
+            if (string.IsNullOrEmpty(panier))
+            {
+                return View();
+            }
+            */
+
+            List<Produit> listePanier = JsonSerializer.Deserialize<List<Produit>>(panier);
+            ViewData["Panier"] = listePanier;
+            string user = User.Identity.Name;
+            var userName = User.FindFirstValue(ClaimTypes.Email);
+
+            IdentityUser identityUser = await _userManager.GetUserAsync(User);
+
+            FactureCommande factureCommande = new FactureCommande()
+            {
+                ProduitsPanier = listePanier,
+                UserConnected = identityUser,
+                
+            };
+            return View(factureCommande);
+
+
         }
 
     }
