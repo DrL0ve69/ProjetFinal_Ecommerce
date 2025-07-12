@@ -6,4 +6,5 @@ public interface IFactureRepository
 {
     IEnumerable<FactureCommande> FactureCommandes { get; }
     void Ajouter(FactureCommande facture);
+    List<FactureCommande> GetFacturesByUser(string userId);
 }

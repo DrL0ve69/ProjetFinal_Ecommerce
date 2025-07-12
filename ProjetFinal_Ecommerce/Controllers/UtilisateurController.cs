@@ -162,10 +162,6 @@ namespace ProjetFinal_Ecommerce.Controllers
             return View(listePanier);
         }
 
-        public IActionResult Commander() 
-        {
-            return View("VoirFacture");
-        }
         public async Task<IActionResult> VoirFacture() 
         {
             string panier = HttpContext.Session.GetString("Panier");
@@ -187,7 +183,7 @@ namespace ProjetFinal_Ecommerce.Controllers
             FactureCommande factureCommande = new FactureCommande()
             {
                 ProduitsPanier = listePanier,
-                UserConnected = identityUser,
+                IdentityUserId = identityUser,
                 
             };
             return View(factureCommande);

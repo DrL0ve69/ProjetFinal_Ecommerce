@@ -1,4 +1,5 @@
-﻿using ProjetFinal_Ecommerce.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjetFinal_Ecommerce.Models;
 
 namespace ProjetFinal_Ecommerce.Database;
 
@@ -16,5 +17,13 @@ public class Db_FactureRepository : IFactureRepository
     {
         _context.DbSet_Factures.Add(facture);
         _context.SaveChanges();
+    }
+
+    public List<FactureCommande> GetFacturesByUser(string userId)
+    {
+        return _context.DbSet_Factures
+            .Where(f => f.IdentityUserId.Id == userId)
+            .Include(f => f.IdentityUserId)
+            .ToList();
     }
 }
