@@ -74,71 +74,6 @@ namespace ProjetFinal_Ecommerce.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -220,7 +155,72 @@ namespace ProjetFinal_Ecommerce.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.FactureCommande", b =>
+            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.Facture", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -228,7 +228,10 @@ namespace ProjetFinal_Ecommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("IdentityUserIdId")
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AppUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("MockproduitId")
@@ -236,7 +239,11 @@ namespace ProjetFinal_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdentityUserIdId");
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("AppUserId1")
+                        .IsUnique()
+                        .HasFilter("[AppUserId1] IS NOT NULL");
 
                     b.HasIndex("MockproduitId");
 
@@ -255,7 +262,7 @@ namespace ProjetFinal_Ecommerce.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FactureCommandeId")
+                    b.Property<int?>("FactureId")
                         .HasColumnType("int");
 
                     b.Property<string>("Marque")
@@ -274,7 +281,7 @@ namespace ProjetFinal_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FactureCommandeId");
+                    b.HasIndex("FactureId");
 
                     b.ToTable("DbSet_Produits");
                 });
@@ -290,7 +297,7 @@ namespace ProjetFinal_Ecommerce.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -299,7 +306,7 @@ namespace ProjetFinal_Ecommerce.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -314,7 +321,7 @@ namespace ProjetFinal_Ecommerce.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -323,18 +330,22 @@ namespace ProjetFinal_Ecommerce.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.FactureCommande", b =>
+            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.Facture", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUserId")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserIdId");
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", "AppUserConnected")
+                        .WithMany("ListeFactures")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", null)
+                        .WithOne("Facture")
+                        .HasForeignKey("ProjetFinal_Ecommerce.Models.Facture", "AppUserId1");
 
                     b.HasOne("ProjetFinal_Ecommerce.Models.Produit", "Mockproduit")
                         .WithMany()
@@ -342,19 +353,26 @@ namespace ProjetFinal_Ecommerce.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdentityUserId");
+                    b.Navigation("AppUserConnected");
 
                     b.Navigation("Mockproduit");
                 });
 
             modelBuilder.Entity("ProjetFinal_Ecommerce.Models.Produit", b =>
                 {
-                    b.HasOne("ProjetFinal_Ecommerce.Models.FactureCommande", null)
+                    b.HasOne("ProjetFinal_Ecommerce.Models.Facture", null)
                         .WithMany("ProduitsPanier")
-                        .HasForeignKey("FactureCommandeId");
+                        .HasForeignKey("FactureId");
                 });
 
-            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.FactureCommande", b =>
+            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.AppUser", b =>
+                {
+                    b.Navigation("Facture");
+
+                    b.Navigation("ListeFactures");
+                });
+
+            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.Facture", b =>
                 {
                     b.Navigation("ProduitsPanier");
                 });

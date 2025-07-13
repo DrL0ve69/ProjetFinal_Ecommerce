@@ -10,7 +10,11 @@
 }
 
 <h1>VoirPanier</h1>
-<p> @identityUser.UserName</p>
+@if (SignInManager.IsSignedIn(User))
+{
+    <p>@identityUser.UserName</p>
+}
+
 <a asp-action="VoirFacture">VoirFacture</a>
 
 <p>

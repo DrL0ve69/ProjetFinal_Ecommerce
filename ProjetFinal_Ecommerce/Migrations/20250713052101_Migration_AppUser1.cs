@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjetFinal_Ecommerce.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationIdentite : Migration
+    public partial class Migration_AppUser1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -156,6 +156,54 @@ namespace ProjetFinal_Ecommerce.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DbSet_Factures",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MockproduitId = table.Column<int>(type: "int", nullable: false),
+                    AppUserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DbSet_Factures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DbSet_Factures_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DbSet_Factures_AspNetUsers_AppUserId1",
+                        column: x => x.AppUserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DbSet_Produits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Marque = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Categorie = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PrixUnitaire = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UrlImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FactureId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DbSet_Produits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DbSet_Produits_DbSet_Factures_FactureId",
+                        column: x => x.FactureId,
+                        principalTable: "DbSet_Factures",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,11 +242,53 @@ namespace ProjetFinal_Ecommerce.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DbSet_Factures_AppUserId",
+                table: "DbSet_Factures",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DbSet_Factures_AppUserId1",
+                table: "DbSet_Factures",
+                column: "AppUserId1",
+                unique: true,
+                filter: "[AppUserId1] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DbSet_Factures_MockproduitId",
+                table: "DbSet_Factures",
+                column: "MockproduitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DbSet_Produits_FactureId",
+                table: "DbSet_Produits",
+                column: "FactureId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_DbSet_Factures_DbSet_Produits_MockproduitId",
+                table: "DbSet_Factures",
+                column: "MockproduitId",
+                principalTable: "DbSet_Produits",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_DbSet_Factures_AspNetUsers_AppUserId",
+                table: "DbSet_Factures");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_DbSet_Factures_AspNetUsers_AppUserId1",
+                table: "DbSet_Factures");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_DbSet_Factures_DbSet_Produits_MockproduitId",
+                table: "DbSet_Factures");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -219,6 +309,12 @@ namespace ProjetFinal_Ecommerce.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "DbSet_Produits");
+
+            migrationBuilder.DropTable(
+                name: "DbSet_Factures");
         }
     }
 }
