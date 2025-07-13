@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjetFinal_Ecommerce.Models;
 
 namespace ProjetFinal_Ecommerce.Controllers
 {
     public class RolesController : Controller
     {
         private RoleManager<IdentityRole> _roleManager;
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<AppUser> _userManager;
 
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -106,7 +107,7 @@ namespace ProjetFinal_Ecommerce.Controllers
 
             if (ModelState.IsValid)
             {
-                IdentityUser user = await _userManager.FindByIdAsync(userId);
+                AppUser user = await _userManager.FindByIdAsync(userId);
                 IdentityRole role = await _roleManager.FindByIdAsync(roleId);
 
                 if (user != null && role != null)

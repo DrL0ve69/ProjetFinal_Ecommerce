@@ -13,9 +13,9 @@ namespace ProjetFinal_Ecommerce.Controllers
     public class UtilisateurController : Controller
     {
         private readonly Db_CommerceContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UtilisateurController(Db_CommerceContext context, UserManager<IdentityUser> userManager)
+        public UtilisateurController(Db_CommerceContext context, UserManager<AppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -178,12 +178,12 @@ namespace ProjetFinal_Ecommerce.Controllers
             string user = User.Identity.Name;
             var userName = User.FindFirstValue(ClaimTypes.Email);
 
-            IdentityUser identityUser = await _userManager.GetUserAsync(User);
+            AppUser identityUser = await _userManager.GetUserAsync(User);
 
-            FactureCommande factureCommande = new FactureCommande()
+            Facture factureCommande = new Facture()
             {
                 ProduitsPanier = listePanier,
-                IdentityUserId = identityUser,
+                AppUserConnected = identityUser,
                 
             };
             return View(factureCommande);

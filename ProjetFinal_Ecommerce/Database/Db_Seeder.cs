@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProjetFinal_Ecommerce.Models;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
 namespace ProjetFinal_Ecommerce.Database;
@@ -84,8 +86,8 @@ public static class Db_Seeder
         RoleManager<IdentityRole> roleManager = appBuilder.ApplicationServices.CreateScope()
             .ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        UserManager<IdentityUser> userManager = appBuilder.ApplicationServices.CreateScope()
-            .ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<AppUser> userManager = appBuilder.ApplicationServices.CreateScope()
+            .ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
         // Trouver le rôle Admin sinon crée le
         IdentityRole role = await roleManager.FindByNameAsync("Admin");
@@ -104,30 +106,30 @@ public static class Db_Seeder
         }
 
         // Ajouter .ToList() pour utiliser foreach en async avec un IQueryable.
-        foreach (IdentityUser user in userManager.Users.ToList()) 
+        foreach (AppUser user in userManager.Users.ToList()) 
         {
             IdentityResult resultatUser = await userManager.AddToRoleAsync(user, "User");
         }
         
         
 
-        IdentityUser userAdmin = await userManager.FindByNameAsync("blabla123@email.com");
+        AppUser userAdmin = await userManager.FindByNameAsync("blabla123@email.com");
         if (userAdmin == null) 
         {
-            IdentityResult result = await userManager.CreateAsync(new IdentityUser ("blabla123@email.com"));
+            IdentityResult result = await userManager.CreateAsync(new AppUser() { UserName = "blabla123@email.com" });
         }
 
         // Admin 2 est créé sans problème pour moi peu importe si blabla123 était déjà existant ou pas.
         // Admin2
-        IdentityUser userAdmin2 = await userManager.FindByNameAsync("Admin2@email.com");
+        AppUser userAdmin2 = await userManager.FindByNameAsync("Admin2@email.com");
         if (userAdmin2 == null)
         {
-            IdentityResult result = await userManager.CreateAsync(new IdentityUser("Admin2@email.com"));
+            IdentityResult result = await userManager.CreateAsync(new AppUser() { UserName = "Admin2@email.com" });
         }
 
         // Récupère de la base de données
-        IdentityUser admin = await userManager.FindByNameAsync("blabla123@email.com");
-        IdentityUser admin2 = await userManager.FindByNameAsync("Admin2@email.com");
+        AppUser admin = await userManager.FindByNameAsync("blabla123@email.com");
+        AppUser admin2 = await userManager.FindByNameAsync("Admin2@email.com");
 
         IdentityRole roleAdmin = await roleManager.FindByNameAsync("Admin");
 
@@ -143,4 +145,5 @@ public static class Db_Seeder
         IdentityResult resultatTest3 = await userManager.AddPasswordAsync(admin2, "Admin2!");
         context.SaveChanges();
     }
+    
 }

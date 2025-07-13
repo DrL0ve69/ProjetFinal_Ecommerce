@@ -11,19 +11,19 @@ public class Db_FactureRepository : IFactureRepository
         _context = context;
     }
 
-    IEnumerable<FactureCommande> IFactureRepository.FactureCommandes => _context.DbSet_Factures.ToList();
+    IEnumerable<Facture> IFactureRepository.FactureCommandes => _context.DbSet_Factures.ToList();
 
-    public void Ajouter(FactureCommande facture)
+    public void Ajouter(Facture facture)
     {
         _context.DbSet_Factures.Add(facture);
         _context.SaveChanges();
     }
 
-    public List<FactureCommande> GetFacturesByUser(string userId)
+    public List<Facture> GetFacturesByUser(string userId)
     {
         return _context.DbSet_Factures
-            .Where(f => f.IdentityUserId.Id == userId)
-            .Include(f => f.IdentityUserId)
+            .Where(f => f.AppUserConnected.Id == userId)
+            .Include(f => f.AppUserConnected)
             .ToList();
     }
 }

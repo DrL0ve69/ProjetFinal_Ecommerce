@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjetFinal_Ecommerce.Database;
+using ProjetFinal_Ecommerce.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Db_CommerceContext_Connection") ?? throw new InvalidOperationException("Connection string 'Db_CommerceContext_Connection' not found.");;
@@ -16,7 +17,7 @@ builder.Services.AddScoped<IProduitRepository, Db_ProduitRepository>();
 builder.Services.AddScoped<IFactureRepository, Db_FactureRepository>();
 
 // Services utilisateurs & rôles
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<Db_CommerceContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();

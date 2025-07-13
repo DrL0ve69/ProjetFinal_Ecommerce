@@ -4,6 +4,7 @@ namespace ProjetFinal_Ecommerce.Models
 {
     public class Produit
     {
+        [Key]
         public int Id { get; set; } // Clé primaire
         [Required]
         public string? Nom { get; set; }

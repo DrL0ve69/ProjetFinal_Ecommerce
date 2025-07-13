@@ -2,12 +2,12 @@
     Facture du client, ne doit être accessible que si celui-ci est connecté !!!
 *@
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<AppUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
     List<Produit> panierVerification = new List<Produit>();
 }
-@model FactureCommande
+@model Facture
 
 <h1>Vôtre facture : <strong>@Model.NomUtilisateur</strong></h1>
 

@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<ProjetFinal_Ecommerce.Models.Produit>
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
 
 @{
     ViewData["Title"] = "VoirPanier";
     List<Produit> panierVerification = new List<Produit>();
-    IdentityUser identityUser =  await UserManager.GetUserAsync(User);
+    AppUser identityUser =  await UserManager.GetUserAsync(User);
 }
 
 <h1>VoirPanier</h1>

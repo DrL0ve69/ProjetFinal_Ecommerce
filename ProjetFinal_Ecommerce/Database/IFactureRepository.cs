@@ -4,7 +4,7 @@ namespace ProjetFinal_Ecommerce.Database;
 
 public interface IFactureRepository
 {
-    IEnumerable<FactureCommande> FactureCommandes { get; }
-    void Ajouter(FactureCommande facture);
-    List<FactureCommande> GetFacturesByUser(string userId);
+    IEnumerable<Facture> FactureCommandes { get; }
+    void Ajouter(Facture facture);
+    List<Facture> GetFacturesByUser(string userId);
 }
