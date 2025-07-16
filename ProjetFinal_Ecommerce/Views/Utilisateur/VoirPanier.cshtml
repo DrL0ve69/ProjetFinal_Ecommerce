@@ -15,7 +15,7 @@
     <p>@identityUser.UserName</p>
 }
 
-<a asp-action="VoirFacture">VoirFacture</a>
+<a asp-action="VoirFactures">VoirFacture</a>
 
 <p>
     <a asp-action="Index">Retour à la liste</a>
@@ -75,7 +75,10 @@
 }
     </tbody>
 </table>
-<div class="container">
+<div class="container d-flex">
+    <div>
+        <a class="btn btn-primary" asp-action="Commande">Commander</a>
+    </div>
     <h3>
         Total facture: @Model.Sum(p => p.PrixUnitaire) $
     </h3>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetFinal_Ecommerce.Database;
 
@@ -11,9 +12,11 @@ using ProjetFinal_Ecommerce.Database;
 namespace ProjetFinal_Ecommerce.Migrations
 {
     [DbContext(typeof(Db_CommerceContext))]
-    partial class Db_CommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20250716014322_ModificationCleProduit_Context3")]
+    partial class ModificationCleProduit_Context3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +177,6 @@ namespace ProjetFinal_Ecommerce.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("FactureId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -218,8 +218,6 @@ namespace ProjetFinal_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FactureId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -239,12 +237,28 @@ namespace ProjetFinal_Ecommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Facture")
+                    b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AppUserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Facture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MockproduitId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Facture");
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("AppUserId1")
+                        .IsUnique()
+                        .HasFilter("[AppUserId1] IS NOT NULL");
+
+                    b.HasIndex("MockproduitId");
 
                     b.ToTable("DbSet_Factures");
                 });
@@ -336,22 +350,25 @@ namespace ProjetFinal_Ecommerce.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjetFinal_Ecommerce.Models.AppUser", b =>
-                {
-                    b.HasOne("ProjetFinal_Ecommerce.Models.Facture", "Facture")
-                        .WithMany()
-                        .HasForeignKey("FactureId");
-
-                    b.Navigation("Facture");
-                });
-
             modelBuilder.Entity("ProjetFinal_Ecommerce.Models.Facture", b =>
                 {
                     b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", "AppUserConnected")
                         .WithMany("ListeFactures")
-                        .HasForeignKey("Facture");
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", null)
+                        .WithOne("Facture")
+                        .HasForeignKey("ProjetFinal_Ecommerce.Models.Facture", "AppUserId1");
+
+                    b.HasOne("ProjetFinal_Ecommerce.Models.Produit", "Mockproduit")
+                        .WithMany()
+                        .HasForeignKey("MockproduitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUserConnected");
+
+                    b.Navigation("Mockproduit");
                 });
 
             modelBuilder.Entity("ProjetFinal_Ecommerce.Models.Produit", b =>
@@ -363,6 +380,8 @@ namespace ProjetFinal_Ecommerce.Migrations
 
             modelBuilder.Entity("ProjetFinal_Ecommerce.Models.AppUser", b =>
                 {
+                    b.Navigation("Facture");
+
                     b.Navigation("ListeFactures");
                 });
 

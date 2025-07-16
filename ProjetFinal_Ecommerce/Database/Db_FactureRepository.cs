@@ -16,6 +16,7 @@ public class Db_FactureRepository : IFactureRepository
     public void Ajouter(Facture facture)
     {
         _context.DbSet_Factures.Add(facture);
+        //_context.Users.Attach(facture.AppUserConnected);
         _context.SaveChanges();
     }
 
@@ -23,7 +24,6 @@ public class Db_FactureRepository : IFactureRepository
     {
         return _context.DbSet_Factures
             .Where(f => f.AppUserConnected.Id == userId)
-            .Include(f => f.AppUserConnected)
             .ToList();
     }
 }

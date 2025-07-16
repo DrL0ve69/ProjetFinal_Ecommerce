@@ -161,34 +161,59 @@ namespace ProjetFinal_Ecommerce.Controllers
             ViewData["Panier"] = listePanier;
             return View(listePanier);
         }
-
-        public async Task<IActionResult> VoirFacture() 
+        public void ViderPanier() 
+        {
+            // Vider le panier
+            HttpContext.Session.Remove("Panier");
+            HttpContext.Session.SetInt32("compteurPanier", 0);
+        }
+        public async Task<IActionResult> Commande() 
         {
             string panier = HttpContext.Session.GetString("Panier");
-            
-            /*
             if (string.IsNullOrEmpty(panier))
             {
-                return View();
+                return RedirectToAction("VoirPanier");
             }
-            */
-
             List<Produit> listePanier = JsonSerializer.Deserialize<List<Produit>>(panier);
             ViewData["Panier"] = listePanier;
             string user = User.Identity.Name;
             var userName = User.FindFirstValue(ClaimTypes.Email);
-
             AppUser identityUser = await _userManager.GetUserAsync(User);
-
-            Facture factureCommande = new Facture()
+            if (identityUser == null)
             {
-                ProduitsPanier = listePanier,
-                AppUserConnected = identityUser,
-                
-            };
-            return View(factureCommande);
+                // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+                return RedirectToAction("Login", "Account");
+            }
+            else 
+            {
+                Facture factureCommande = new Facture()
+                {
+                    ProduitsPanier = listePanier,
+                    AppUserConnected = identityUser,
+                    //AppUserId = identityUser.Id // Associer l'utilisateur connecté à la facture
 
+                };
 
+                _context.DbSet_Factures.Add(factureCommande);
+                // Mettre à jour l'utilisateur avec la facture ??
+                //identityUser.ListeFactures.Add(factureCommande);
+                _context.Update(identityUser);
+
+                //await _context.SaveChangesAsync();
+                ViderPanier();
+                return View("VoirFactures", identityUser.ListeFactures);
+            }
+
+        }
+        public async Task<IActionResult> VoirFactures() 
+        {
+            // Retrouvé les factures de l'utilisateur connecté
+            AppUser identityUser = await _userManager.GetUserAsync(User);
+            List<Facture> factures = _userManager.Users
+                .Where(u => u.Id == identityUser.Id)
+                .SelectMany(u => u.ListeFactures)
+                .ToList();
+            return View(factures);
         }
 
     }
