@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetFinal_Ecommerce.Database;
 
@@ -11,9 +12,11 @@ using ProjetFinal_Ecommerce.Database;
 namespace ProjetFinal_Ecommerce.Migrations
 {
     [DbContext(typeof(Db_CommerceContext))]
-    partial class Db_CommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20250716133734_Modifications_AllModels2")]
+    partial class Modifications_AllModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,7 +260,7 @@ namespace ProjetFinal_Ecommerce.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FactureId")
+                    b.Property<int>("FactureId")
                         .HasColumnType("int");
 
                     b.Property<string>("Marque")
@@ -347,7 +350,9 @@ namespace ProjetFinal_Ecommerce.Migrations
                 {
                     b.HasOne("ProjetFinal_Ecommerce.Models.Facture", null)
                         .WithMany("ProduitsPanier")
-                        .HasForeignKey("FactureId");
+                        .HasForeignKey("FactureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjetFinal_Ecommerce.Models.AppUser", b =>

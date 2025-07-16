@@ -14,11 +14,13 @@ namespace ProjetFinal_Ecommerce.Controllers
     {
         private readonly Db_CommerceContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly Db_FactureRepository _factureRepository;
 
-        public UtilisateurController(Db_CommerceContext context, UserManager<AppUser> userManager)
+        public UtilisateurController(Db_CommerceContext context, UserManager<AppUser> userManager, Db_FactureRepository factureRepository)
         {
             _context = context;
             _userManager = userManager;
+            _factureRepository = factureRepository;
         }
 
         public async Task<IActionResult> Index(int? pageNumber)
@@ -190,18 +192,15 @@ namespace ProjetFinal_Ecommerce.Controllers
                 {
                     ProduitsPanier = listePanier,
                     AppUserConnected = identityUser,
-                    //AppUserId = identityUser.Id // Associer l'utilisateur connecté à la facture
+                    AppUserId = identityUser.Id // Associer l'utilisateur connecté à la facture
 
                 };
 
                 _context.DbSet_Factures.Add(factureCommande);
-                // Mettre à jour l'utilisateur avec la facture ??
-                //identityUser.ListeFactures.Add(factureCommande);
-                _context.Update(identityUser);
 
-                //await _context.SaveChangesAsync();
+                List<Facture> factures = _factureRepository.GetAllFactures();
                 ViderPanier();
-                return View("VoirFactures", identityUser.ListeFactures);
+                return View("VoirFactures", factures);
             }
 
         }
@@ -209,10 +208,7 @@ namespace ProjetFinal_Ecommerce.Controllers
         {
             // Retrouvé les factures de l'utilisateur connecté
             AppUser identityUser = await _userManager.GetUserAsync(User);
-            List<Facture> factures = _userManager.Users
-                .Where(u => u.Id == identityUser.Id)
-                .SelectMany(u => u.ListeFactures)
-                .ToList();
+            List<Facture> factures =  _context.DbSet_Factures.Where(f => f.AppUserId == identityUser.Id).ToList();
             return View(factures);
         }
 

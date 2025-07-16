@@ -13,6 +13,10 @@ public class Db_FactureRepository : IFactureRepository
 
     IEnumerable<Facture> IFactureRepository.FactureCommandes => _context.DbSet_Factures.ToList();
 
+    public List<Facture> GetAllFactures() 
+    {
+        return _context.DbSet_Factures.ToList();
+    }
     public void Ajouter(Facture facture)
     {
         _context.DbSet_Factures.Add(facture);

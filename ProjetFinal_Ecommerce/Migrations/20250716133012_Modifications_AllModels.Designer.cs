@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetFinal_Ecommerce.Database;
 
@@ -11,9 +12,11 @@ using ProjetFinal_Ecommerce.Database;
 namespace ProjetFinal_Ecommerce.Migrations
 {
     [DbContext(typeof(Db_CommerceContext))]
-    partial class Db_CommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20250716133012_Modifications_AllModels")]
+    partial class Modifications_AllModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,13 +237,12 @@ namespace ProjetFinal_Ecommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
+                    b.Property<string>("AppUserConnectedId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("AppUserConnectedId");
 
                     b.ToTable("DbSet_Factures");
                 });
@@ -257,7 +259,7 @@ namespace ProjetFinal_Ecommerce.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FactureId")
+                    b.Property<int>("FactureId")
                         .HasColumnType("int");
 
                     b.Property<string>("Marque")
@@ -336,9 +338,7 @@ namespace ProjetFinal_Ecommerce.Migrations
                 {
                     b.HasOne("ProjetFinal_Ecommerce.Models.AppUser", "AppUserConnected")
                         .WithMany("ListeFactures")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserConnectedId");
 
                     b.Navigation("AppUserConnected");
                 });
@@ -347,7 +347,9 @@ namespace ProjetFinal_Ecommerce.Migrations
                 {
                     b.HasOne("ProjetFinal_Ecommerce.Models.Facture", null)
                         .WithMany("ProduitsPanier")
-                        .HasForeignKey("FactureId");
+                        .HasForeignKey("FactureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjetFinal_Ecommerce.Models.AppUser", b =>

@@ -74,13 +74,22 @@ public static class Db_Seeder
         Db_CommerceContext context = appBuilder.ApplicationServices.CreateScope()
             .ServiceProvider.GetRequiredService<Db_CommerceContext>();
 
+        /*
+         * 
+        Db_FactureRepository factureRepo = appBuilder.ApplicationServices.CreateScope()
+            .ServiceProvider.GetRequiredService<Db_FactureRepository>();
+
+        Db_ProduitRepository produitRepo = appBuilder.ApplicationServices.CreateScope()
+            .ServiceProvider.GetRequiredService<Db_ProduitRepository>();
+
+        */
         if (!context.DbSet_Produits.Any())
         {
+            
             context.DbSet_Produits.AddRange(_seedProduits);
             context.SaveChanges();
 
         }
-
 
 
         RoleManager<IdentityRole> roleManager = appBuilder.ApplicationServices.CreateScope()
